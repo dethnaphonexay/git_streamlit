@@ -74,7 +74,7 @@ if not ltc_data.empty:
             <p>Total Subscribers</p>
             <h2>{:,}</h2>
         </div>
-        """.format(data['total_sub'].sum()),
+        """.format(ltc_data['total_sub'].sum()),
         unsafe_allow_html=True,
     )
     cols[1].markdown(
