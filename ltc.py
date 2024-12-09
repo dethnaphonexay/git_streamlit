@@ -66,7 +66,7 @@ if not ltc_data.empty:
     st.markdown(
         f"""
         <div class="total-subscribers-box">
-            Total Subscribers (LTC): {total_subscribers:,}
+            Total Subscribers : {total_subscribers:,}
         </div>
         """,
         unsafe_allow_html=True,
@@ -137,7 +137,7 @@ if not ltc_data.empty:
 
     fee_col1.markdown(
     """
-    <div class="center">
+    <div class="total-subscribers-box">
         <p>Total Fee Estimate</p>
         <h2>{:,}</h2>
     </div>
@@ -147,7 +147,7 @@ if not ltc_data.empty:
 
     fee_col2.markdown(
     """
-    <div class="center">
+    <div class="total-subscribers-box">
         <p>Total Fee Collected</p>
         <h2>{:,}</h2>
     </div>

@@ -66,7 +66,7 @@ if not etl_data.empty:
     st.markdown(
         f"""
         <div class="total-subscribers-box">
-            Total Subscribers (LTC): {total_subscribers:,}
+            Total Subscribers : {total_subscribers:,}
         </div>
         """,
         unsafe_allow_html=True,
@@ -129,7 +129,7 @@ if not etl_data.empty:
     )
 
     # Fee Charge Summary
-    st.subheader("Fee Charge (LTC)", divider="gray")
+    st.subheader("Fee Charge (ETL)", divider="gray")
     fee_col1, fee_col2 = st.columns(2)
 
     # fee_col1.metric("Total Fee Estimate", f"{ltc_data['total_fee_estimate'].sum():,}")
