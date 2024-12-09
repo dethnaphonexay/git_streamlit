@@ -21,23 +21,11 @@ st.markdown(
         font-weight: bold;
         margin: 20px 0;
     }
-    .metric-box {
-        background: #ffffff;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 10px;
-    }
-    .metric-card {
-        background: #ffffff !important;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-bottom: 15px;
-        text-align: center;
-    }
+    .center {
+           
+            text-align: center;
+           
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -87,54 +75,54 @@ if not ltc_data.empty:
     cols = st.columns(6)
     cols[0].markdown(
         """
-        <div class="metric-box">
-            <h5>Total Subscribers</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="center">
+            <p>Total Subscribers</p>
+            <h2>{:,}</h2>
         </div>
         """.format(ltc_data['total_sub'].sum()),
         unsafe_allow_html=True,
     )
     cols[1].markdown(
         """
-        <div class="metric-box">
-            <h5>MBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="center">
+            <p>MBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(ltc_data['mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[2].markdown(
         """
-        <div class="metric-box">
-            <h5>FBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="center">
+            <p>FBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(ltc_data['fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[3].markdown(
         """
-        <div class="metric-box">
-            <h5>Active MBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="center">
+            <p>Active MBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(ltc_data['active_mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[4].markdown(
         """
-        <div class="metric-box">
-            <h5>Active FBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="center">
+            <p>Active FBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(ltc_data['active_fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[5].markdown(
         """
-        <div class="metric-box">
-            <h5>Disable MBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="center">
+            <p>Disable MBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(ltc_data['disable_mbb'].sum()),
         unsafe_allow_html=True,
@@ -143,21 +131,29 @@ if not ltc_data.empty:
     # Fee Charge Summary
     st.subheader("Fee Charge (LTC)", divider="gray")
     fee_col1, fee_col2 = st.columns(2)
+
     # fee_col1.metric("Total Fee Estimate", f"{ltc_data['total_fee_estimate'].sum():,}")
     # fee_col2.metric("Total Fee Collected", f"{ltc_data['total_collected_fee'].sum():,}")
-    with fee_col1:
-    # สร้างกรอบ
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.markdown("<h6>Total Fee Estimate</h6>", unsafe_allow_html=True)
-        st.metric("", f"{ltc_data['total_fee_estimate'].sum():,}")
-        st.markdown('</div>', unsafe_allow_html=True)
 
-    with fee_col2:
-    # สร้างกรอบ
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.markdown("<h6>Total Fee Collected</h6>", unsafe_allow_html=True)
-        st.metric("", f"{ltc_data['total_collected_fee'].sum():,}")
-        st.markdown('</div>', unsafe_allow_html=True)
+    fee_col1.markdown(
+    """
+    <div class="center">
+        <p>Total Fee Estimate</p>
+        <h2>{:,}</h2>
+    </div>
+    """.format(ltc_data['total_fee_estimate'].sum()),
+    unsafe_allow_html=True,
+    )
+
+    fee_col2.markdown(
+    """
+    <div class="center">
+        <p>Total Fee Collected</p>
+        <h2>{:,}</h2>
+    </div>
+    """.format(ltc_data['total_collected_fee'].sum()),
+    unsafe_allow_html=True,
+    )
 
     # รายละเอียดค่าธรรมเนียม MBB และ FBB
     st.subheader("Details by Service Type (LTC)", divider="gray")
