@@ -83,7 +83,7 @@ if not ltc_data.empty:
             <p>MBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(data['mbb'].sum()),
+        """.format(ltc_data['mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[2].markdown(
@@ -92,7 +92,7 @@ if not ltc_data.empty:
             <p>FBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(data['fbb'].sum()),
+        """.format(ltc_data['fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[3].markdown(
@@ -101,7 +101,7 @@ if not ltc_data.empty:
             <p>Active MBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(data['active_mbb'].sum()),
+        """.format(ltc_data['active_mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[4].markdown(
@@ -110,7 +110,7 @@ if not ltc_data.empty:
             <p>Active FBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(data['active_fbb'].sum()),
+        """.format(ltc_data['active_fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[5].markdown(
@@ -119,7 +119,7 @@ if not ltc_data.empty:
             <p>Disable MBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(data['disable_mbb'].sum()),
+        """.format(ltc_data['disable_mbb'].sum()),
         unsafe_allow_html=True,
     )
 
