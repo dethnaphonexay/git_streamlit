@@ -62,16 +62,16 @@ if not etl_data.empty:
     st.title("Dashboard Monitor Fee Charge ETL")
 
     # แสดง Total Subscribers แบบ metric
-    total_subscribers = etl_data['total_sub'].sum()
-    st.markdown(
-        f"""
-        <div class="total-subscribers-box">
-            Total Subscribers : {total_subscribers:,}
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
+    # total_subscribers = etl_data['total_sub'].sum()
+    # st.markdown(
+    #     f"""
+    #     <div class="total-subscribers-box">
+    #         Total Subscribers : {total_subscribers:,}
+    #     </div>
+    #     """,
+    #     unsafe_allow_html=True,
+    # )
+    st.subheader("Total Subscribers", divider="gray")
     cols = st.columns(6)
     cols[0].markdown(
         """
@@ -137,7 +137,7 @@ if not etl_data.empty:
 
     fee_col1.markdown(
     """
-    <div class="center">
+    <div class="total-subscribers-box">
         <p>Total Fee Estimate</p>
         <h2>{:,}</h2>
     </div>
@@ -147,7 +147,7 @@ if not etl_data.empty:
 
     fee_col2.markdown(
     """
-    <div class="center">
+    <div class="total-subscribers-box">
         <p>Total Fee Collected</p>
         <h2>{:,}</h2>
     </div>
