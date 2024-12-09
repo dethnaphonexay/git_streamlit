@@ -126,8 +126,21 @@ if not ltc_data.empty:
     # Fee Charge Summary
     st.subheader("Fee Charge (LTC)", divider="gray")
     fee_col1, fee_col2 = st.columns(2)
-    fee_col1.metric("Total Fee Estimate", f"{ltc_data['total_fee_estimate'].sum():,}")
-    fee_col2.metric("Total Fee Collected", f"{ltc_data['total_collected_fee'].sum():,}")
+    # fee_col1.metric("Total Fee Estimate", f"{ltc_data['total_fee_estimate'].sum():,}")
+    # fee_col2.metric("Total Fee Collected", f"{ltc_data['total_collected_fee'].sum():,}")
+    with fee_col1:
+    # สร้างกรอบ
+        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+        st.markdown("<h3>Total Fee Estimate</h3>", unsafe_allow_html=True)
+        st.metric("", f"{ltc_data['total_fee_estimate'].sum():,}")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with fee_col2:
+    # สร้างกรอบ
+        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
+        st.markdown("<h3>Total Fee Collected</h3>", unsafe_allow_html=True)
+        st.metric("", f"{ltc_data['total_collected_fee'].sum():,}")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # รายละเอียดค่าธรรมเนียม MBB และ FBB
     st.subheader("Details by Service Type (LTC)", divider="gray")
