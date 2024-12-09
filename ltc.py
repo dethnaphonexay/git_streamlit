@@ -167,7 +167,7 @@ if not data.empty:
     cols = st.columns(6)
     cols[0].markdown(
         """
-        <div class="metric-card">
+        <div class="metric-box">
             <p>Total Subscribers</p>
             <h2>{:,}</h2>
         </div>
@@ -176,7 +176,7 @@ if not data.empty:
     )
     cols[1].markdown(
         """
-        <div class="metric-card">
+        <div class="metric-box">
             <p>MBB</p>
             <h2>{:,}</h2>
         </div>
@@ -185,7 +185,7 @@ if not data.empty:
     )
     cols[2].markdown(
         """
-        <div class="metric-card">
+        <div class="metric-box">
             <p>FBB</p>
             <h2>{:,}</h2>
         </div>
@@ -194,7 +194,7 @@ if not data.empty:
     )
     cols[3].markdown(
         """
-        <div class="metric-card">
+        <div class="metric-box">
             <p>Active MBB</p>
             <h2>{:,}</h2>
         </div>
@@ -203,7 +203,7 @@ if not data.empty:
     )
     cols[4].markdown(
         """
-        <div class="metric-card">
+        <div class="metric-box">
             <p>Active FBB</p>
             <h2>{:,}</h2>
         </div>
@@ -212,7 +212,7 @@ if not data.empty:
     )
     cols[5].markdown(
         """
-        <div class="metric-card">
+        <div class="metric-box">
             <p>Disable MBB</p>
             <h2>{:,}</h2>
         </div>
