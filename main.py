@@ -20,7 +20,7 @@
 
 
 import streamlit as st
-from streamlit_extras.app_logo import add_logo
+
 
 # ตั้งค่าหน้าก่อนทำอย่างอื่น
 st.set_page_config(page_title="Dashboard", layout="wide")
