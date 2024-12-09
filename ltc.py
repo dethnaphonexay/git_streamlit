@@ -51,28 +51,8 @@ def load_data():
 
 # โหลดข้อมูล
 st.title("Dashboard Monitor Fee Charge")
-# data = load_data()
+data = load_data()
 
-# Define the data
-datas = {
-    "operator_name": ["LTC", "ETL", "TPLUS", "UNITEL", "BEST"],
-    "total_sub": [2100356, 1087876, 1210692, 2325848, 807054],
-    "active_sub": [1850000, 985420, 1005486, 1956896, 752365],
-    "disable_sub": [250356, 102456, 205206, 368952, 54689],
-    "mbb": [1943527, 1027682, 1210692, 2118235, 795863],
-    "fbb": [156829, 60194, None, 207613, 11191],
-    "active_mbb": [1713725, 940278, 1005486, 1765155, 743217],
-    "disable_mbb": [229802, 87404, 205206, 353080, 52646],
-    "active_fbb": [136275, 45142, None, 191741, 9148],
-    "disable_fbb": [20554, 15052, None, 15872, 2043],
-    "total_fee_charge_mbb": [5141175000, 2820834000, 3016458000, 5295465000, 2229651000],
-    "total_fee_charge_fbb": [681375000, 225710000, None, 958705000, 45740000],
-    "total_fee_estimate": [5822550000, 3046544000, 3016458000, 6254170000, 2275391000],
-    "total_collected_fee_mbb": [3907293000, 2256667200, 2714812200, 4501145250, 2162761470],
-    "total_collected_fee_fbb": [647306250, 196367700, None, 853247450, 43453000],
-    "total_collected_fee": [4554599250, 2453034900, 2714812200, 5354392700, 2206214470],
-}
-data = pd.DataFrame(datas)
 # ตรวจสอบว่ามีข้อมูลหรือไม่
 if not data.empty:
     # สรุปข้อมูล
@@ -141,7 +121,7 @@ if not data.empty:
     #     """,
     #     unsafe_allow_html=True,
     # )
-    # สร้างกรอบรวมผู้ให้บริการทั้งหมด
+    # # สร้างกรอบรวมผู้ให้บริการทั้งหมด
     # for i in range(0, len(data), 5):  # สร้างทีละ 5 Operator
     #     cols = st.columns(5)
     #     for col, row in zip(cols, data.iloc[i:i + 5].itertuples()):
@@ -155,6 +135,7 @@ if not data.empty:
     #                 """,
     #                 unsafe_allow_html=True,
     #             )
+
     # cols = st.columns(6)
     # cols[0].metric("Total Subscribers", f"{data['total_sub'].sum():,}")
     # cols[1].metric("MBB", f"{data['mbb'].sum():,}")
@@ -163,74 +144,61 @@ if not data.empty:
     # cols[4].metric("Active FBB", f"{data['active_fbb'].sum():,}")
     # cols[5].metric("Disable MBB", f"{data['disable_mbb'].sum():,}")
 
-
     cols = st.columns(6)
     cols[0].markdown(
         """
-        <div class="metric-box">
-            <h5>Total Subscribers</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="metric-card">
+            <p>Total Subscribers</p>
+            <h2>{:,}</h2>
         </div>
         """.format(data['total_sub'].sum()),
         unsafe_allow_html=True,
     )
     cols[1].markdown(
         """
-        <div class="metric-box">
-            <h5>MBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="metric-card">
+            <p>MBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(data['mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[2].markdown(
         """
-        <div class="metric-box">
-            <h5>FBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="metric-card">
+            <p>FBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(data['fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[3].markdown(
         """
-        <div class="metric-box">
-            <h5>Active MBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="metric-card">
+            <p>Active MBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(data['active_mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[4].markdown(
         """
-        <div class="metric-box">
-            <h5>Active FBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="metric-card">
+            <p>Active FBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(data['active_fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[5].markdown(
         """
-        <div class="metric-box">
-            <h5>Disable MBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
+        <div class="metric-card">
+            <p>Disable MBB</p>
+            <h2>{:,}</h2>
         </div>
         """.format(data['disable_mbb'].sum()),
         unsafe_allow_html=True,
     )
-
-    cols[6].markdown(
-        """
-        <div class="metric-box">
-            <h5>Disable FBB</h5>
-            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
-        </div>
-        """.format(data['disable_fbb'].sum()),
-        unsafe_allow_html=True,
-    )
-
-
 
     # Fee Charge Summary
     st.subheader("Fee Charge", divider="gray")
