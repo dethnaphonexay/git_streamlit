@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-# from sqlalchemy import create_engine
+from sqlalchemy import create_engine
 import plotly.express as px
 
 # ตั้งค่าหน้าเว็บ
@@ -33,21 +33,21 @@ st.markdown(
 )
 
 # ฟังก์ชันสำหรับดึงข้อมูลจาก PostgreSQL
-# @st.cache_data
-# def load_data():
-#     try:
-#         conn_str = "postgresql://smscdr:%23Ltc1qaz2wsx%40pg@172.28.27.50:5432/CDKPTL"
-#         engine = create_engine(conn_str)
-#         query = """
-#         SELECT operator_name, total_sub, active_sub, disable_sub, mbb, fbb, active_mbb, disable_mbb, active_fbb, disable_fbb, 
-#                total_fee_charge_mbb, total_fee_charge_fbb, total_fee_estimate, 
-#                total_collected_fee_mbb, total_collected_fee_fbb, total_collected_fee
-#         FROM gov.operator_detail where operator_name = 'LTC';
-#         """
-#         return pd.read_sql(query, engine)
-#     except Exception as e:
-#         st.error(f"Error connecting to database: {e}")
-#         return pd.DataFrame()
+@st.cache_data
+def load_data():
+    try:
+        conn_str = "postgresql://smscdr:%23Ltc1qaz2wsx%40pg@172.28.27.50:5432/CDKPTL"
+        engine = create_engine(conn_str)
+        query = """
+        SELECT operator_name, total_sub, active_sub, disable_sub, mbb, fbb, active_mbb, disable_mbb, active_fbb, disable_fbb, 
+               total_fee_charge_mbb, total_fee_charge_fbb, total_fee_estimate, 
+               total_collected_fee_mbb, total_collected_fee_fbb, total_collected_fee
+        FROM gov.operator_detail where operator_name = 'LTC';
+        """
+        return pd.read_sql(query, engine)
+    except Exception as e:
+        st.error(f"Error connecting to database: {e}")
+        return pd.DataFrame()
 
 # โหลดข้อมูล
 st.title("Dashboard Monitor Fee Charge")
