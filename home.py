@@ -52,9 +52,6 @@ st.markdown(
 
 # โหลดข้อมูล
 st.title("Dashboard Monitor Fee Charge")
-# data = load_data()
-
-import pandas as pd
 
 # Define the data
 datas = {
