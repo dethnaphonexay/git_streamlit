@@ -62,16 +62,16 @@ if not ltc_data.empty:
     st.title("Dashboard Monitor Fee Charge LTC")
 
     # แสดง Total Subscribers แบบ metric
-    total_subscribers = ltc_data['total_sub'].sum()
-    st.markdown(
-        f"""
-        <div class="total-subscribers-box">
-            Total Subscribers : {total_subscribers:,}
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
+    # total_subscribers = ltc_data['total_sub'].sum()
+    # st.markdown(
+    #     f"""
+    #     <div class="total-subscribers-box">
+    #         Total Subscribers : {total_subscribers:,}
+    #     </div>
+    #     """,
+    #     unsafe_allow_html=True,
+    # )
+    st.subheader("Total Subscribers", divider="gray")
     cols = st.columns(6)
     cols[0].markdown(
         """
