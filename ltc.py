@@ -88,8 +88,8 @@ if not ltc_data.empty:
     cols[0].markdown(
         """
         <div class="metric-box">
-            <p>Total Subscribers</p>
-            <h2>{:,}</h2>
+            <h5>Total Subscribers</h5>
+            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
         </div>
         """.format(ltc_data['total_sub'].sum()),
         unsafe_allow_html=True,
@@ -97,8 +97,8 @@ if not ltc_data.empty:
     cols[1].markdown(
         """
         <div class="metric-box">
-            <p>MBB</p>
-            <h2>{:,}</h2>
+            <h5>MBB</h5>
+            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
         </div>
         """.format(ltc_data['mbb'].sum()),
         unsafe_allow_html=True,
@@ -106,8 +106,8 @@ if not ltc_data.empty:
     cols[2].markdown(
         """
         <div class="metric-box">
-            <p>FBB</p>
-            <h2>{:,}</h2>
+            <h5>FBB</h5>
+            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
         </div>
         """.format(ltc_data['fbb'].sum()),
         unsafe_allow_html=True,
@@ -115,8 +115,8 @@ if not ltc_data.empty:
     cols[3].markdown(
         """
         <div class="metric-box">
-            <p>Active MBB</p>
-            <h2>{:,}</h2>
+            <h5>Active MBB</h5>
+            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
         </div>
         """.format(ltc_data['active_mbb'].sum()),
         unsafe_allow_html=True,
@@ -124,8 +124,8 @@ if not ltc_data.empty:
     cols[4].markdown(
         """
         <div class="metric-box">
-            <p>Active FBB</p>
-            <h2>{:,}</h2>
+            <h5>Active FBB</h5>
+            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
         </div>
         """.format(ltc_data['active_fbb'].sum()),
         unsafe_allow_html=True,
@@ -133,8 +133,8 @@ if not ltc_data.empty:
     cols[5].markdown(
         """
         <div class="metric-box">
-            <p>Disable MBB</p>
-            <h2>{:,}</h2>
+            <h5>Disable MBB</h5>
+            <p><b></b> <span style="font-size: 30px; font-weight: bold;">{:,}</span></p>
         </div>
         """.format(ltc_data['disable_mbb'].sum()),
         unsafe_allow_html=True,
