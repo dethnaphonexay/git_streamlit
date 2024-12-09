@@ -131,14 +131,14 @@ if not ltc_data.empty:
     with fee_col1:
     # สร้างกรอบ
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.markdown("<h3>Total Fee Estimate</h3>", unsafe_allow_html=True)
+        st.markdown("<h5>Total Fee Estimate</h5>", unsafe_allow_html=True)
         st.metric("", f"{ltc_data['total_fee_estimate'].sum():,}")
         st.markdown('</div>', unsafe_allow_html=True)
 
     with fee_col2:
     # สร้างกรอบ
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.markdown("<h3>Total Fee Collected</h3>", unsafe_allow_html=True)
+        st.markdown("<h5>Total Fee Collected</h5>", unsafe_allow_html=True)
         st.metric("", f"{ltc_data['total_collected_fee'].sum():,}")
         st.markdown('</div>', unsafe_allow_html=True)
 
