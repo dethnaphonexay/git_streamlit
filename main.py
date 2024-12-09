@@ -15,7 +15,7 @@ pages = {
         st.Page("best.py", title="BEST"),
     ],
 }
-st.sidebar.title("Navigation")
+st.sidebar.title("FEES CHARGE")
 pg = st.navigation(pages)
 pg.run()
 
