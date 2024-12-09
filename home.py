@@ -154,7 +154,7 @@ if not data.empty:
                 st.markdown(
                     f"""
                     <div class="metric-box">
-                        <h5>{row.operator_name}</h3>
+                        <h5>{row.operator_name}</h5>
                         <p><b></b> <span style="font-size: 30px; font-weight: bold;">{row.total_sub:,}</span></p>
                     </div>
                     """,
