@@ -54,7 +54,7 @@ ltc_data = data[data['operator_name'] == 'LTC']
 
 # ตรวจสอบว่ามีข้อมูลหรือไม่
 if not ltc_data.empty:
-    st.title("Dashboard Monitor Fee Charge: LTC")
+    st.title("Dashboard Monitor Fee Charge LTC")
 
     # แสดง Total Subscribers แบบ metric
     total_subscribers = ltc_data['total_sub'].sum()
@@ -64,6 +64,62 @@ if not ltc_data.empty:
             Total Subscribers (LTC): {total_subscribers:,}
         </div>
         """,
+        unsafe_allow_html=True,
+    )
+
+    cols = st.columns(6)
+    cols[0].markdown(
+        """
+        <div class="metric-card">
+            <p>Total Subscribers</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(data['total_sub'].sum()),
+        unsafe_allow_html=True,
+    )
+    cols[1].markdown(
+        """
+        <div class="metric-card">
+            <p>MBB</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(data['mbb'].sum()),
+        unsafe_allow_html=True,
+    )
+    cols[2].markdown(
+        """
+        <div class="metric-card">
+            <p>FBB</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(data['fbb'].sum()),
+        unsafe_allow_html=True,
+    )
+    cols[3].markdown(
+        """
+        <div class="metric-card">
+            <p>Active MBB</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(data['active_mbb'].sum()),
+        unsafe_allow_html=True,
+    )
+    cols[4].markdown(
+        """
+        <div class="metric-card">
+            <p>Active FBB</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(data['active_fbb'].sum()),
+        unsafe_allow_html=True,
+    )
+    cols[5].markdown(
+        """
+        <div class="metric-card">
+            <p>Disable MBB</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(data['disable_mbb'].sum()),
         unsafe_allow_html=True,
     )
 
