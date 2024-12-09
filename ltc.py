@@ -21,6 +21,15 @@ st.markdown(
         font-weight: bold;
         margin: 20px 0;
     }
+    .metric-box {
+        background: #ffffff;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px;
+    }
     </style>
     """,
     unsafe_allow_html=True,
