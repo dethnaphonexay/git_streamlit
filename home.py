@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 # from sqlalchemy import create_engine
 import plotly.express as px
-from streamlit_echarts import st_echarts
+
 
 # ตั้งค่าหน้าเว็บ
 # st.set_page_config(page_title="Dashboard", layout="wide")
@@ -160,70 +160,6 @@ if not data.empty:
                     """,
                     unsafe_allow_html=True,
                 )
-
-
-        options = {
-        "title": {"text": "subscribers in operator"},
-        "tooltip": {
-            "trigger": "axis",
-            "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
-        },
-        "legend": {"data": ["LTC", "ETL", "UNITEL", "TPLUS", "BEST"]},
-        "toolbox": {"feature": {"saveAsImage": {}}},
-        "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
-        "xAxis": [
-            {
-                "type": "category",
-                "boundaryGap": False,
-                "data": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-            }
-        ],
-        "yAxis": [{"type": "value"}],
-        "series": [
-            {
-                "name": "LTC",
-                "type": "line",
-                "stack": "总量",
-                "areaStyle": {},
-                "emphasis": {"focus": "series"},
-                "data": [120, 132, 101, 134, 90, 230, 210],
-            },
-            {
-                "name": "ETL",
-                "type": "line",
-                "stack": "总量",
-                "areaStyle": {},
-                "emphasis": {"focus": "series"},
-                "data": [220, 182, 191, 234, 290, 330, 310],
-            },
-            {
-                "name": "UNITEL",
-                "type": "line",
-                "stack": "总量",
-                "areaStyle": {},
-                "emphasis": {"focus": "series"},
-                "data": [150, 232, 201, 154, 190, 330, 410],
-            },
-            {
-                "name": "TPLUS",
-                "type": "line",
-                "stack": "总量",
-                "areaStyle": {},
-                "emphasis": {"focus": "series"},
-                "data": [320, 332, 301, 334, 390, 330, 320],
-            },
-            {
-                "name": "BEST",
-                "type": "line",
-                "stack": "总量",
-                "label": {"show": True, "position": "top"},
-                "areaStyle": {},
-                "emphasis": {"focus": "series"},
-                "data": [820, 932, 901, 934, 1290, 1330, 1320],
-            },
-        ],
-    }
-    st_echarts(options=options, height="400px")
 
     # Fee Charge Summary
     st.subheader("Fee Charge", divider="gray")
