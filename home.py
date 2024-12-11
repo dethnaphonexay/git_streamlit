@@ -170,7 +170,7 @@ if not data.empty:
     fee_col1.markdown(
     """
     <div class="total-subscribers-box">
-        <p>Total Fee Estimate</p>
+        <p>Total Fee Estimate (LAK)</p>
         <h2>{:,}</h2>
     </div>
     """.format(data['total_fee_estimate'].sum()),
@@ -180,7 +180,7 @@ if not data.empty:
     fee_col2.markdown(
     """
     <div class="total-subscribers-box">
-        <p>Total Fee Collected</p>
+        <p>Total Fee Collected (LAK)</p>
         <h2>{:,}</h2>
     </div>
     """.format(data['total_collected_fee'].sum()),
@@ -207,10 +207,10 @@ if not data.empty:
     # รายละเอียดค่าธรรมเนียม MBB และ FBB
     st.subheader("Details by Service Type", divider="gray")
     service_col1, service_col2, service_col3, service_col4 = st.columns(4)
-    service_col1.metric("Total Fee Estimate MBB", f"{data['total_fee_charge_mbb'].sum():,}")
-    service_col2.metric("Total Fee Collected MBB", f"{data['total_collected_fee_mbb'].sum():,}")
-    service_col3.metric("Total Fee Estimate FBB", f"{data['total_fee_charge_fbb'].sum():,}")
-    service_col4.metric("Total Fee Collected FBB", f"{data['total_collected_fee_fbb'].sum():,}")
+    service_col1.metric("Total Fee Estimate MBB (LAK)", f"{data['total_fee_charge_mbb'].sum():,}")
+    service_col2.metric("Total Fee Collected MBB (LAK)", f"{data['total_collected_fee_mbb'].sum():,}")
+    service_col3.metric("Total Fee Estimate FBB (LAK)", f"{data['total_fee_charge_fbb'].sum():,}")
+    service_col4.metric("Total Fee Collected FBB (LAK)", f"{data['total_collected_fee_fbb'].sum():,}")
 
     # Pie Charts
     st.subheader("Visualizations", divider="gray")

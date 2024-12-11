@@ -14,7 +14,7 @@ st.markdown(
     }
     .total-subscribers-box {
         background-color: #f8f9f9;
-        padding: 20px;
+        padding: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         text-align: center;
         font-size: 40px;
@@ -130,38 +130,79 @@ if not ltc_data.empty:
 
     # Fee Charge Summary
     st.subheader("Fee Charge (LTC)", divider="gray")
-    fee_col1, fee_col2 = st.columns(2)
+    fee_col1, fee_col2, fee_col3 = st.columns(3)
 
     # fee_col1.metric("Total Fee Estimate", f"{ltc_data['total_fee_estimate'].sum():,}")
     # fee_col2.metric("Total Fee Collected", f"{ltc_data['total_collected_fee'].sum():,}")
 
+    # fee_col1.markdown(
+    # """
+    # <div class="total-subscribers-box">
+    #     <p>Total Fee Estimate (LAK)</p>
+    #     <h2>{:,}</h2>
+    # </div>
+    # """.format(ltc_data['total_fee_estimate'].sum()),
+    # unsafe_allow_html=True,
+    # )
+
+    # fee_col2.markdown(
+    # """
+    # <div class="total-subscribers-box">
+    #     <p>Total Fee Collected (LAK)</p>
+    #     <h2>{:,}</h2>
+    # </div>
+    # """.format(ltc_data['total_collected_fee'].sum()),
+    # unsafe_allow_html=True,
+    # )
+
+    # คำนวณเปอร์เซ็นต์
+    fee_collected_percentage = (
+        ltc_data['total_collected_fee'].sum() / ltc_data['total_fee_estimate'].sum()
+    ) * 100
+    fee_remaining = ltc_data['total_fee_estimate'].sum() - ltc_data['total_collected_fee'].sum()
+    
     fee_col1.markdown(
-    """
-    <div class="total-subscribers-box">
-        <p>Total Fee Estimate</p>
-        <h2>{:,}</h2>
-    </div>
-    """.format(ltc_data['total_fee_estimate'].sum()),
-    unsafe_allow_html=True,
+        """
+        <div class="total-subscribers-box">
+            <p>Total Fee Estimate (LAK)</p>
+            <h2>{:,}</h2>
+            <h6> </h6>
+        </div>
+        """.format(ltc_data['total_fee_estimate'].sum()),
+        unsafe_allow_html=True,
     )
 
     fee_col2.markdown(
-    """
-    <div class="total-subscribers-box">
-        <p>Total Fee Collected</p>
-        <h2>{:,}</h2>
-    </div>
-    """.format(ltc_data['total_collected_fee'].sum()),
-    unsafe_allow_html=True,
+        """
+        <div class="total-subscribers-box">
+            <p>Total Fee Collected (LAK)</p>
+            <h2>{:,}</h2>
+            <h6>({:.2f}%)</h6>
+            
+        </div>
+        """.format(ltc_data['total_collected_fee'].sum(), fee_collected_percentage),
+        unsafe_allow_html=True,
+    )
+
+    fee_col3.markdown(
+        """
+        <div class="total-subscribers-box">
+            <p>Total Fee Remaining (LAK)</p>
+            <h2>{:,}</h2>
+            <h6> </h6>
+            
+        </div>
+        """.format(fee_remaining ),
+        unsafe_allow_html=True,
     )
 
     # รายละเอียดค่าธรรมเนียม MBB และ FBB
     st.subheader("Details by Service Type (LTC)", divider="gray")
     service_col1, service_col2, service_col3, service_col4 = st.columns(4)
-    service_col1.metric("Total Fee Estimate MBB", f"{ltc_data['total_fee_charge_mbb'].sum():,}")
-    service_col2.metric("Total Fee Collected MBB", f"{ltc_data['total_collected_fee_mbb'].sum():,}")
-    service_col3.metric("Total Fee Estimate FBB", f"{ltc_data['total_fee_charge_fbb'].sum():,}")
-    service_col4.metric("Total Fee Collected FBB", f"{ltc_data['total_collected_fee_fbb'].sum():,}")
+    service_col1.metric("Total Fee Estimate MBB (LAK)", f"{ltc_data['total_fee_charge_mbb'].sum():,}")
+    service_col2.metric("Total Fee Collected MBB (LAK)", f"{ltc_data['total_collected_fee_mbb'].sum():,}")
+    service_col3.metric("Total Fee Estimate FBB (LAK)", f"{ltc_data['total_fee_charge_fbb'].sum():,}")
+    service_col4.metric("Total Fee Collected FBB (LAK)", f"{ltc_data['total_collected_fee_fbb'].sum():,}")
 
     # Pie Charts
     st.subheader("Visualizations (LTC)", divider="gray")
