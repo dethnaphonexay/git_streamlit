@@ -163,29 +163,69 @@ if not data.empty:
 
     # Fee Charge Summary
     st.subheader("Fee Charge", divider="gray")
-    fee_col1, fee_col2 = st.columns(2)
+    fee_col1, fee_col2, fee_col3 = st.columns(3)
     # fee_col1.metric("Total Fee Estimate", f"{data['total_fee_estimate'].sum():,}")
     # fee_col2.metric("Total Fee Collected", f"{data['total_collected_fee'].sum():,}")
 
+    fee_collected_percentage = (
+        data['total_collected_fee'].sum() / data['total_fee_estimate'].sum()
+    ) * 100
+    fee_remaining = data['total_fee_estimate'].sum() - data['total_collected_fee'].sum()
+
     fee_col1.markdown(
-    """
-    <div class="total-subscribers-box">
-        <p>Total Fee Estimate (LAK)</p>
-        <h2>{:,}</h2>
-    </div>
-    """.format(data['total_fee_estimate'].sum()),
-    unsafe_allow_html=True,
+        """
+        <div class="total-subscribers-box">
+            <p>Total Fee Estimate (LAK)</p>
+            <h2>{:,}</h2>
+            <h6> </h6>
+        </div>
+        """.format(data['total_fee_estimate'].sum()),
+        unsafe_allow_html=True,
     )
 
     fee_col2.markdown(
-    """
-    <div class="total-subscribers-box">
-        <p>Total Fee Collected (LAK)</p>
-        <h2>{:,}</h2>
-    </div>
-    """.format(data['total_collected_fee'].sum()),
-    unsafe_allow_html=True,
+        """
+        <div class="total-subscribers-box">
+            <p>Total Fee Collected (LAK)</p>
+            <h2>{:,}</h2>
+            <h6>({:.2f}%)</h6>
+            
+        </div>
+        """.format(data['total_collected_fee'].sum(), fee_collected_percentage),
+        unsafe_allow_html=True,
     )
+
+    fee_col3.markdown(
+        """
+        <div class="total-subscribers-box">
+            <p>Total Fee Remaining (LAK)</p>
+            <h2>{:,}</h2>
+            <h6> </h6>
+            
+        </div>
+        """.format(fee_remaining ),
+        unsafe_allow_html=True,
+    )
+
+    # fee_col1.markdown(
+    # """
+    # <div class="total-subscribers-box">
+    #     <p>Total Fee Estimate (LAK)</p>
+    #     <h2>{:,}</h2>
+    # </div>
+    # """.format(data['total_fee_estimate'].sum()),
+    # unsafe_allow_html=True,
+    # )
+
+    # fee_col2.markdown(
+    # """
+    # <div class="total-subscribers-box">
+    #     <p>Total Fee Collected (LAK)</p>
+    #     <h2>{:,}</h2>
+    # </div>
+    # """.format(data['total_collected_fee'].sum()),
+    # unsafe_allow_html=True,
+    # )
    
 
 
