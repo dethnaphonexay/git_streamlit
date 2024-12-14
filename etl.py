@@ -206,7 +206,7 @@ if not data.empty:
 else:
     st.warning("No data available to display.")
 
-    st.subheader("Subscribers daily", divider="gray")
+st.subheader("Subscribers daily", divider="gray")
 options = {
     "title": {"text": "Total"},
     "tooltip": {"trigger": "axis"},
