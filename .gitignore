@@ -4,3 +4,4 @@ image/
 .vscode
 .venv
 .venv3
+env/
