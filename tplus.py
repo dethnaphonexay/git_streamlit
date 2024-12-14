@@ -12,77 +12,71 @@ st.markdown(
         font-family: 'Arial', sans-serif;
         color: #333333;
     }
-    .total-subscribers-box {
-        background-color: #f8f9f9;
+    .stTitle {
+        font-size: 28px;
+        color: #2c3e50;
+        font-weight: bold;
+    }
+    .metric-box {
+        background: #ffffff !important;
         padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .total-subscribers-box {
+        background-color:rgb(239, 241, 241);
+        padding: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         text-align: center;
         font-size: 40px;
         font-weight: bold;
         margin: 20px 0;
     }
-    .center {
-           
-            text-align: center;
-           
+    .center { 
+        text-align: center;
         }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# Define the data
-datas = {
-    "operator_name": ["LTC", "ETL", "TPLUS", "UNITEL", "BEST"],
-    "total_sub": [2100356, 1087876, 1210692, 2325848, 807054],
-    "active_sub": [1850000, 985420, 1005486, 1956896, 752365],
-    "disable_sub": [250356, 102456, 205206, 368952, 54689],
-    "mbb": [1943527, 1027682, 1210692, 2118235, 795863],
-    "fbb": [156829, 60194, None, 207613, 11191],
-    "active_mbb": [1713725, 940278, 1005486, 1765155, 743217],
-    "disable_mbb": [229802, 87404, 205206, 353080, 52646],
-    "active_fbb": [136275, 45142, None, 191741, 9148],
-    "disable_fbb": [20554, 15052, None, 15872, 2043],
-    "total_fee_charge_mbb": [5141175000, 2820834000, 3016458000, 5295465000, 2229651000],
-    "total_fee_charge_fbb": [681375000, 225710000, None, 958705000, 45740000],
-    "total_fee_estimate": [5822550000, 3046544000, 3016458000, 6254170000, 2275391000],
-    "total_collected_fee_mbb": [3907293000, 2256667200, 2714812200, 4501145250, 2162761470],
-    "total_collected_fee_fbb": [647306250, 196367700, None, 853247450, 43453000],
-    "total_collected_fee": [4554599250, 2453034900, 2714812200, 5354392700, 2206214470],
-}
+# ฟังก์ชันสำหรับดึงข้อมูลจาก CSV
+@st.cache_data
+def load_data_from_path(file_path):
+    try:
+        return pd.read_csv(file_path)
+    except Exception as e:
+        st.error(f"Error reading the file: {e}")
+        return pd.DataFrame()
 
-# Create the DataFrame
-data = pd.DataFrame(datas)
+# ระบุ path ของไฟล์ CSV
+# file_path = "data.csv"  # แก้ไข path ตรงนี้เป็น path จริงของไฟล์ CSV บนระบบของคุณ
+file_path = r"C:\Users\Asus\Desktop\Project_stremlit\git_streamlit\data\operator_data.csv"
+
+# โหลดข้อมูล
+data = load_data_from_path(file_path)
 
 # กรองข้อมูลเฉพาะของ LTC
 tplus_data = data[data['operator_name'] == 'TPLUS']
 
 # ตรวจสอบว่ามีข้อมูลหรือไม่
-if not tplus_data.empty:
-    st.title("Dashboard Monitor Fee Charge TPLUS")
-
-    # แสดง Total Subscribers แบบ metric
-    # total_subscribers = etl_data['total_sub'].sum()
-    # st.markdown(
-    #     f"""
-    #     <div class="total-subscribers-box">
-    #         Total Subscribers : {total_subscribers:,}
-    #     </div>
-    #     """,
-    #     unsafe_allow_html=True,
-    # )
+if not data.empty:
+    # สร้างกรอบรวมผู้ให้บริการทั้งหมด
+    if not tplus_data.empty:
+        st.title("Dashboard Monitor Fee Charge UNITEL")
     st.subheader("Total Subscribers", divider="gray")
-    cols = st.columns(6)
-    cols[0].markdown(
-        """
-        <div class="center">
-            <p>Total Subscribers</p>
-            <h2>{:,}</h2>
+    total_subscribers = tplus_data['total_sub'].sum()
+    st.markdown(
+        f"""
+        <div class="total-subscribers-box">
+            Total Subscribers: {total_subscribers:,}
         </div>
-        """.format(tplus_data['total_sub'].sum()),
+        """,
         unsafe_allow_html=True,
     )
-    cols[1].markdown(
+    cols = st.columns(6)
+    cols[0].markdown(
         """
         <div class="center">
             <p>MBB</p>
@@ -91,7 +85,7 @@ if not tplus_data.empty:
         """.format(tplus_data['mbb'].sum()),
         unsafe_allow_html=True,
     )
-    cols[2].markdown(
+    cols[1].markdown(
         """
         <div class="center">
             <p>FBB</p>
@@ -100,7 +94,7 @@ if not tplus_data.empty:
         """.format(tplus_data['fbb'].sum()),
         unsafe_allow_html=True,
     )
-    cols[3].markdown(
+    cols[2].markdown(
         """
         <div class="center">
             <p>Active MBB</p>
@@ -109,7 +103,7 @@ if not tplus_data.empty:
         """.format(tplus_data['active_mbb'].sum()),
         unsafe_allow_html=True,
     )
-    cols[4].markdown(
+    cols[3].markdown(
         """
         <div class="center">
             <p>Active FBB</p>
@@ -118,7 +112,7 @@ if not tplus_data.empty:
         """.format(tplus_data['active_fbb'].sum()),
         unsafe_allow_html=True,
     )
-    cols[5].markdown(
+    cols[4].markdown(
         """
         <div class="center">
             <p>Disable MBB</p>
@@ -127,35 +121,18 @@ if not tplus_data.empty:
         """.format(tplus_data['disable_mbb'].sum()),
         unsafe_allow_html=True,
     )
+    cols[5].markdown(
+        """
+        <div class="center">
+            <p>Disable FBB</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(tplus_data['disable_fbb'].sum()),
+        unsafe_allow_html=True,
+    )
 
     # Fee Charge Summary
-    # st.subheader("Fee Charge (TPLUS)", divider="gray")
-    # fee_col1, fee_col2, fee_col3 = st.columns(3)
-
-    # fee_col1.metric("Total Fee Estimate", f"{ltc_data['total_fee_estimate'].sum():,}")
-    # fee_col2.metric("Total Fee Collected", f"{ltc_data['total_collected_fee'].sum():,}")
-
-    # fee_col1.markdown(
-    # """
-    # <div class="total-subscribers-box">
-    #     <p>Total Fee Estimate (LAK)</p>
-    #     <h2>{:,}</h2>
-    # </div>
-    # """.format(tplus_data['total_fee_estimate'].sum()),
-    # unsafe_allow_html=True,
-    # )
-
-    # fee_col2.markdown(
-    # """
-    # <div class="total-subscribers-box">
-    #     <p>Total Fee Collected (LAK)</p>
-    #     <h2>{:,}</h2>
-    # </div>
-    # """.format(tplus_data['total_collected_fee'].sum()),
-    # unsafe_allow_html=True,
-    # )
-
-    # คำนวณเปอร์เซ็นต์
+    st.subheader("Fee Charge", divider="gray")
     total_fee_estimate = tplus_data['total_fee_estimate'].sum()
     total_collected_fee = tplus_data['total_collected_fee'].sum()
 
@@ -163,11 +140,7 @@ if not tplus_data.empty:
     fee_remaining = total_fee_estimate - total_collected_fee
     percent_remaining = (fee_remaining / total_fee_estimate) * 100
 
-    # Layout
-    st.subheader("Fee Charge", divider="gray")
     fee_col1, fee_col2, fee_col3 = st.columns(3)
-
-    # Display Metrics
     fee_col1.markdown(f"""
     <div class="total-subscribers-box">
         <p>Total Fee Estimate (LAK)</p>
@@ -175,7 +148,6 @@ if not tplus_data.empty:
         <h6>(100%)</h6>
     </div>
     """, unsafe_allow_html=True)
-
     fee_col2.markdown(f"""
     <div class="total-subscribers-box">
         <p>Total Fee Collected (LAK)</p>
@@ -183,7 +155,6 @@ if not tplus_data.empty:
         <h6>({fee_collected_percentage:.2f}%)</h6>
     </div>
     """, unsafe_allow_html=True)
-
     fee_col3.markdown(f"""
     <div class="total-subscribers-box">
         <p>Total Fee Remaining (LAK)</p>
@@ -192,8 +163,8 @@ if not tplus_data.empty:
     </div>
     """, unsafe_allow_html=True)
 
-    # รายละเอียดค่าธรรมเนียม MBB และ FBB
-    st.subheader("Details by Service Type (TPLUS)", divider="gray")
+     # รายละเอียดค่าธรรมเนียม MBB และ FBB
+    st.subheader("Details by Service Type (LTC)", divider="gray")
     service_col1, service_col2, service_col3, service_col4 = st.columns(4)
     service_col1.metric("Total Fee Estimate MBB (LAK)", f"{tplus_data['total_fee_charge_mbb'].sum():,}")
     service_col2.metric("Total Fee Collected MBB (LAK)", f"{tplus_data['total_collected_fee_mbb'].sum():,}")
@@ -201,40 +172,36 @@ if not tplus_data.empty:
     service_col4.metric("Total Fee Collected FBB (LAK)", f"{tplus_data['total_collected_fee_fbb'].sum():,}")
 
     # Pie Charts
-    st.subheader("Visualizations (TPLUS)", divider="gray")
+    st.subheader("Visualizations", divider="gray")
     pie_col1, pie_col2, pie_col3 = st.columns(3)
-
-    # Total fee collected vs estimated
     fig1 = px.pie(
         values=[
             tplus_data['total_collected_fee'].sum(),
             tplus_data['total_fee_estimate'].sum() - tplus_data['total_collected_fee'].sum()
         ],
         names=["Collected", "Remaining"],
-        title="Total Fee Collected (TPLUS)"
+        title="Total Fee Collected"
     )
     pie_col1.plotly_chart(fig1)
 
-    # Fee MBB collected vs estimated
     fig2 = px.pie(
         values=[
             tplus_data['total_collected_fee_mbb'].sum(),
             tplus_data['total_fee_charge_mbb'].sum() - tplus_data['total_collected_fee_mbb'].sum()
         ],
         names=["Collected MBB", "Remaining MBB"],
-        title="MBB Fee Collected (TPLUS)"
+        title="MBB Fee Collected"
     )
     pie_col2.plotly_chart(fig2)
 
-    # Fee FBB collected vs estimated
     fig3 = px.pie(
         values=[
             tplus_data['total_collected_fee_fbb'].sum(),
             tplus_data['total_fee_charge_fbb'].sum() - tplus_data['total_collected_fee_fbb'].sum()
         ],
         names=["Collected FBB", "Remaining FBB"],
-        title="FBB Fee Collected (TPLUS)"
+        title="FBB Fee Collected"
     )
     pie_col3.plotly_chart(fig3)
 else:
-    st.warning("No data available for TPLUS.")
+    st.warning("No data available to display.")

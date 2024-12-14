@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# ตั้งค่าหน้าเว็บ
+st.set_page_config(page_title="Dashboard", layout="wide")
+
 # CSS Styling
 st.markdown(
     """
@@ -35,6 +38,9 @@ st.markdown(
     }
     .center { 
         text-align: center;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
         }
     </style>
     """,
@@ -58,83 +64,83 @@ file_path = r"C:\Users\Asus\Desktop\Project_stremlit\git_streamlit\data\operator
 data = load_data_from_path(file_path)
 
 # กรองข้อมูลเฉพาะของ LTC
-best_data = data[data['operator_name'] == 'BEST']
+ltc_data = data[data['operator_name'] == 'LTC']
 
 # ตรวจสอบว่ามีข้อมูลหรือไม่
 if not data.empty:
     # สร้างกรอบรวมผู้ให้บริการทั้งหมด
-    if not best_data.empty:
-        st.title("Dashboard Monitor Fee Charge BEST")
+    if not ltc_data.empty:
+        st.title("Dashboard Monitor Fee Charge LTC")
     st.subheader("Total Subscribers", divider="gray")
-    total_subscribers = best_data['total_sub'].sum()
-    st.markdown(
-        f"""
-        <div class="total-subscribers-box">
-            Total Subscribers: {total_subscribers:,}
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    cols = st.columns(6)
+    cols = st.columns(7)
     cols[0].markdown(
         """
         <div class="center">
-            <p>MBB</p>
+            <p>Total Subscribers</p>
             <h2>{:,}</h2>
         </div>
-        """.format(best_data['mbb'].sum()),
+        """.format(ltc_data['total_sub'].sum()),
         unsafe_allow_html=True,
     )
     cols[1].markdown(
         """
         <div class="center">
-            <p>FBB</p>
+            <p>MBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(best_data['fbb'].sum()),
+        """.format(ltc_data['mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[2].markdown(
         """
         <div class="center">
-            <p>Active MBB</p>
+            <p>FBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(best_data['active_mbb'].sum()),
+        """.format(ltc_data['fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[3].markdown(
         """
         <div class="center">
-            <p>Active FBB</p>
+            <p>Active MBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(best_data['active_fbb'].sum()),
+        """.format(ltc_data['active_mbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[4].markdown(
         """
         <div class="center">
-            <p>Disable MBB</p>
+            <p>Active FBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(best_data['disable_mbb'].sum()),
+        """.format(ltc_data['active_fbb'].sum()),
         unsafe_allow_html=True,
     )
     cols[5].markdown(
         """
         <div class="center">
+            <p>Disable MBB</p>
+            <h2>{:,}</h2>
+        </div>
+        """.format(ltc_data['disable_mbb'].sum()),
+        unsafe_allow_html=True,
+    )
+    cols[6].markdown(
+        """
+        <div class="center">
             <p>Disable FBB</p>
             <h2>{:,}</h2>
         </div>
-        """.format(best_data['disable_fbb'].sum()),
+        """.format(ltc_data['disable_fbb'].sum()),
         unsafe_allow_html=True,
     )
 
     # Fee Charge Summary
     st.subheader("Fee Charge", divider="gray")
-    total_fee_estimate = best_data['total_fee_estimate'].sum()
-    total_collected_fee = best_data['total_collected_fee'].sum()
+    total_fee_estimate = ltc_data['total_fee_estimate'].sum()
+    total_collected_fee = ltc_data['total_collected_fee'].sum()
 
     fee_collected_percentage = (total_collected_fee / total_fee_estimate) * 100
     fee_remaining = total_fee_estimate - total_collected_fee
@@ -166,18 +172,18 @@ if not data.empty:
      # รายละเอียดค่าธรรมเนียม MBB และ FBB
     st.subheader("Details by Service Type (LTC)", divider="gray")
     service_col1, service_col2, service_col3, service_col4 = st.columns(4)
-    service_col1.metric("Total Fee Estimate MBB (LAK)", f"{best_data['total_fee_charge_mbb'].sum():,}")
-    service_col2.metric("Total Fee Collected MBB (LAK)", f"{best_data['total_collected_fee_mbb'].sum():,}")
-    service_col3.metric("Total Fee Estimate FBB (LAK)", f"{best_data['total_fee_charge_fbb'].sum():,}")
-    service_col4.metric("Total Fee Collected FBB (LAK)", f"{best_data['total_collected_fee_fbb'].sum():,}")
+    service_col1.metric("Total Fee Estimate MBB (LAK)", f"{ltc_data['total_fee_charge_mbb'].sum():,}")
+    service_col2.metric("Total Fee Collected MBB (LAK)", f"{ltc_data['total_collected_fee_mbb'].sum():,}")
+    service_col3.metric("Total Fee Estimate FBB (LAK)", f"{ltc_data['total_fee_charge_fbb'].sum():,}")
+    service_col4.metric("Total Fee Collected FBB (LAK)", f"{ltc_data['total_collected_fee_fbb'].sum():,}")
 
     # Pie Charts
     st.subheader("Visualizations", divider="gray")
     pie_col1, pie_col2, pie_col3 = st.columns(3)
     fig1 = px.pie(
         values=[
-            best_data['total_collected_fee'].sum(),
-            best_data['total_fee_estimate'].sum() - best_data['total_collected_fee'].sum()
+            ltc_data['total_collected_fee'].sum(),
+            ltc_data['total_fee_estimate'].sum() - ltc_data['total_collected_fee'].sum()
         ],
         names=["Collected", "Remaining"],
         title="Total Fee Collected"
@@ -186,8 +192,8 @@ if not data.empty:
 
     fig2 = px.pie(
         values=[
-            best_data['total_collected_fee_mbb'].sum(),
-            best_data['total_fee_charge_mbb'].sum() - best_data['total_collected_fee_mbb'].sum()
+            ltc_data['total_collected_fee_mbb'].sum(),
+            ltc_data['total_fee_charge_mbb'].sum() - ltc_data['total_collected_fee_mbb'].sum()
         ],
         names=["Collected MBB", "Remaining MBB"],
         title="MBB Fee Collected"
@@ -196,8 +202,8 @@ if not data.empty:
 
     fig3 = px.pie(
         values=[
-            best_data['total_collected_fee_fbb'].sum(),
-            best_data['total_fee_charge_fbb'].sum() - best_data['total_collected_fee_fbb'].sum()
+            ltc_data['total_collected_fee_fbb'].sum(),
+            ltc_data['total_fee_charge_fbb'].sum() - ltc_data['total_collected_fee_fbb'].sum()
         ],
         names=["Collected FBB", "Remaining FBB"],
         title="FBB Fee Collected"

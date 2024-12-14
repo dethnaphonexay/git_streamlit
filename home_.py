@@ -23,11 +23,12 @@ st.markdown(
     .metric-box {
         background: #ffffff !important;
         padding: 20px;
+        text-align: center;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .total-subscribers-box {
-        background-color: #f8f9f9;
+        background-color:rgb(239, 241, 241);
         padding: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         text-align: center;
@@ -118,6 +119,14 @@ if not data.empty:
         <h6>({percent_remaining:.2f}%)</h6>
     </div>
     """, unsafe_allow_html=True)
+
+     # รายละเอียดค่าธรรมเนียม MBB และ FBB
+    st.subheader("Details by Service Type (LTC)", divider="gray")
+    service_col1, service_col2, service_col3, service_col4 = st.columns(4)
+    service_col1.metric("Total Fee Estimate MBB (LAK)", f"{data['total_fee_charge_mbb'].sum():,}")
+    service_col2.metric("Total Fee Collected MBB (LAK)", f"{data['total_collected_fee_mbb'].sum():,}")
+    service_col3.metric("Total Fee Estimate FBB (LAK)", f"{data['total_fee_charge_fbb'].sum():,}")
+    service_col4.metric("Total Fee Collected FBB (LAK)", f"{data['total_collected_fee_fbb'].sum():,}")
 
     # Pie Charts
     st.subheader("Visualizations", divider="gray")
