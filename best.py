@@ -164,7 +164,7 @@ if not data.empty:
     """, unsafe_allow_html=True)
 
      # รายละเอียดค่าธรรมเนียม MBB และ FBB
-    st.subheader("Details by Service Type (LTC)", divider="gray")
+    st.subheader("Details by Service Type (BEST)", divider="gray")
     service_col1, service_col2, service_col3, service_col4 = st.columns(4)
     service_col1.metric("Total Fee Estimate MBB (LAK)", f"{best_data['total_fee_charge_mbb'].sum():,}")
     service_col2.metric("Total Fee Collected MBB (LAK)", f"{best_data['total_collected_fee_mbb'].sum():,}")
@@ -211,7 +211,7 @@ options = {
     "title": {"text": "Total"},
     "tooltip": {"trigger": "axis"},
     "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
-    "legend": {"data": ["LTC"]},
+    "legend": {"data": ["BEST"]},
     "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
     "toolbox": {"feature": {"saveAsImage": {}}},
     "xAxis": {
