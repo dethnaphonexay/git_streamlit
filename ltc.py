@@ -208,3 +208,8 @@ if not data.empty:
     pie_col3.plotly_chart(fig3)
 else:
     st.warning("No data available to display.")
+
+
+
+
+    
