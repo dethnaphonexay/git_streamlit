@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from streamlit_echarts import st_echarts
+
+
 
 # ตั้งค่าหน้าเว็บ
 st.set_page_config(page_title="Dashboard", layout="wide")
@@ -211,3 +214,26 @@ if not data.empty:
     pie_col3.plotly_chart(fig3)
 else:
     st.warning("No data available to display.")
+
+st.subheader("Visualizations", divider="gray")
+options = {
+    "title": {"text": "Subscribers daily"},
+    "tooltip": {"trigger": "axis"},
+    "legend": {"data": ["LTC"]},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "toolbox": {"feature": {"saveAsImage": {}}},
+    "xAxis": {
+        "type": "category",
+        "boundaryGap": False,
+        "data": ["1", "2", "3", "4", "5", "6", "7"],
+    },
+    "yAxis": {"type": "value"},
+    "series": [
+        {
+            "name": "LTC",
+            "type": "line",          
+            "data": [120, 132, 101, 134, 90, 230, 210],
+        },
+    ],
+}
+st_echarts(options=options, height="400px")
