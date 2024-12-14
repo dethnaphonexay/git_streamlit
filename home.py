@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
+from streamlit_echarts import st_echarts
 # ตั้งค่าหน้าเว็บ
 # st.set_page_config(page_title="Dashboard", layout="wide")
 
@@ -162,3 +162,50 @@ if not data.empty:
     pie_col3.plotly_chart(fig3)
 else:
     st.warning("No data available to display.")
+
+options = {
+    "title": {"text": "Subscribers"},
+    "tooltip": {"trigger": "axis"},
+    "legend": {"data": ["LTC", "ETL", "UNITEL", "TPLUS", "BEST"]},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "toolbox": {"feature": {"saveAsImage": {}}},
+    "xAxis": {
+        "type": "category",
+        "boundaryGap": False,
+        "data": ["1", "2", "3", "4", "5", "6", "7", "8" , "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26"],
+    },
+    "yAxis": {"type": "value"},
+    "series": [
+        {
+            "name": "LTC",
+            "type": "line",
+           
+             "data": [99796, 95090, 130030, 38936, 133799, 14040, 106034, 125765, 60335, 123086, 82329, 112472, 148613, 133634, 117956, 76377, 48966, 56890, 15605, 8432, 98921, 77448, 61190, 61840, 30937, 143744],
+        },
+        {
+            "name": "ETL",
+            "type": "line",
+            
+            "data": [37888, 41535, 25513, 31117, 27273, 81302, 56879, 44847, 3108, 841, 49498, 8586, 70179, 74521, 74849, 3016, 35021, 35627, 50724, 29234, 67530, 21237, 78136, 27179, 4559, 45257],
+        },
+        {
+            "name": "UNITEL",
+            "type": "line",
+           
+            "data": [244766, 115029, 95817, 255190, 133356, 160984, 100495, 220173, 242412, 84693, 104486, 219746, 52761, 20907, 74036, 96754, 71091, 134701, 5193, 86389, 52694, 234828, 82094, 123973, 198152, 35134],
+        },
+        {
+            "name": "TPLUS",
+            "type": "line",
+            
+            "data": [58388, 56334, 47516, 2166, 19603, 7409, 13217, 50833, 33224, 41158, 67006, 4515, 36549, 18585, 32284, 33349, 38106, 10570, 54751, 70499, 67129, 56685, 24272, 39996, 39392, 61705],
+        },
+        {
+            "name": "BEST",
+            "type": "line",
+            
+            "data": [37, 98, 231, 245, 92, 135, 290, 103, 35, 214, 30, 273, 181, 80, 80, 262, 70, 247, 200, 321, 221, 40, 29, 23, 321, 100],
+        },
+    ],
+}
+st_echarts(options=options, height="400px")
