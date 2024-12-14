@@ -51,9 +51,10 @@ def load_data_from_path(file_path):
         return pd.DataFrame()
 
 # ระบุ path ของไฟล์ CSV
-# file_path = "data.csv"  # แก้ไข path ตรงนี้เป็น path จริงของไฟล์ CSV บนระบบของคุณ
-file_path = r"C:\Users\Asus\Desktop\Project_stremlit\git_streamlit\data\operator_data.csv"
-
+file_path = "operator_data.csv"  # แก้ไข path ตรงนี้เป็น path จริงของไฟล์ CSV บนระบบของคุณ
+# file_path = r"C:\Users\Asus\Desktop\Project_stremlit\git_streamlit\data\operator_data.csv"
+# funded.to_csv(os.path.join(path, 'operator_data.csv')
+file_path = r"git_streamlit\data\operator_data.csv"
 # โหลดข้อมูล
 data = load_data_from_path(file_path)
 
