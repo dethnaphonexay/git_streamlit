@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
+from streamlit_echarts import st_echarts
 # ตั้งค่าหน้าเว็บ
 # st.set_page_config(page_title="Dashboard", layout="wide")
 
@@ -210,6 +210,30 @@ else:
     st.warning("No data available to display.")
 
 
+st.subheader("Subscribers daily", divider="gray")
+options = {
+    "title": {"text": "Total"},
+    "tooltip": {"trigger": "axis"},
+    "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
+    "legend": {"data": ["LTC"]},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "toolbox": {"feature": {"saveAsImage": {}}},
+    "xAxis": {
+        "type": "category",
+        "boundaryGap": False,
+        "data": ["1", "2", "3", "4", "5", "6", "7", "8" , "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26"],
+    },
+    "yAxis": {"type": "value"},
+    "series": [
+        {
+            "name": "LTC",
+            "type": "line",
+            "areaStyle": {},
+            "emphasis": {"focus": "series"},         
+            "data": [99796, 95090, 130030, 38936, 133799, 14040, 106034, 125765, 60335, 123086, 82329, 112472, 148613, 133634, 117956, 76377, 48966, 56890, 15605, 8432, 98921, 77448, 61190, 61840, 30937, 143744],
+        },
+    ],
+}
+st_echarts(options=options, height="400px")
 
 
-    

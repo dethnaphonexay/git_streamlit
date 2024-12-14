@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
+from streamlit_echarts import st_echarts
 # CSS Styling
 st.markdown(
     """
@@ -205,3 +205,29 @@ if not data.empty:
     pie_col3.plotly_chart(fig3)
 else:
     st.warning("No data available to display.")
+
+    st.subheader("Subscribers daily", divider="gray")
+options = {
+    "title": {"text": "Total"},
+    "tooltip": {"trigger": "axis"},
+    "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
+    "legend": {"data": ["LTC"]},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "toolbox": {"feature": {"saveAsImage": {}}},
+    "xAxis": {
+        "type": "category",
+        "boundaryGap": False,
+        "data": ["1", "2", "3", "4", "5", "6", "7", "8" , "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26"],
+    },
+    "yAxis": {"type": "value"},
+    "series": [
+        {
+            "name": "LTC",
+            "type": "line",
+            "areaStyle": {},
+            "emphasis": {"focus": "series"},         
+            "data": [37888, 41535, 25513, 31117, 27273, 81302, 56879, 44847, 3108, 841, 49498, 8586, 70179, 74521, 74849, 3016, 35021, 35627, 50724, 29234, 67530, 21237, 78136, 27179, 4559, 45257],
+        },
+    ],
+}
+st_echarts(options=options, height="400px")
