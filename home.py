@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
-# from sqlalchemy import create_engine
 import plotly.express as px
-
-
+from streamlit_echarts import st_echarts
 # ตั้งค่าหน้าเว็บ
 # st.set_page_config(page_title="Dashboard", layout="wide")
 
@@ -25,32 +23,39 @@ st.markdown(
     .metric-box {
         background: #ffffff !important;
         padding: 20px;
+        text-align: center;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .total-subscribers-box {
+        background-color:rgb(239, 241, 241);
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-size: 40px;
+        font-weight: bold;
+        margin: 20px 0;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# ฟังก์ชันสำหรับดึงข้อมูลจาก PostgreSQL
-# @st.cache_data
-# def load_data():
-#     try:
-#         conn_str = "postgresql://smscdr:%23Ltc1qaz2wsx%40pg@172.28.27.50:5432/CDKPTL"
-#         engine = create_engine(conn_str)
-#         query = """
-#         SELECT operator_name, total_sub, active_sub, disable_sub, mbb, fbb, active_mbb, disable_mbb, active_fbb, disable_fbb, 
-#                total_fee_charge_mbb, total_fee_charge_fbb, total_fee_estimate, 
-#                total_collected_fee_mbb, total_collected_fee_fbb, total_collected_fee
-#         FROM gov.operator_detail;
-#         """
-#         return pd.read_sql(query, engine)
-#     except Exception as e:
-#         st.error(f"Error connecting to database: {e}")
-#         return pd.DataFrame()
+# ฟังก์ชันสำหรับดึงข้อมูลจาก CSV
+@st.cache_data
+def load_data_from_path(file_path):
+    try:
+        return pd.read_csv(file_path)
+    except Exception as e:
+        st.error(f"Error reading the file: {e}")
+        return pd.DataFrame()
+
+# ระบุ path ของไฟล์ CSV
+# file_path = "data.csv"  # แก้ไข path ตรงนี้เป็น path จริงของไฟล์ CSV บนระบบของคุณ
+file_path = r"C:\Users\Asus\Desktop\Project_stremlit\git_streamlit\data\operator_data.csv"
 
 # โหลดข้อมูล
+<<<<<<< HEAD
 st.title("Dashboard Monitor Fee Charge")
 
 # Define the data
@@ -77,65 +82,17 @@ datas = {
 data = pd.DataFrame(datas)
 
 
+=======
+data = load_data_from_path(file_path)
+>>>>>>> 61d415c767d15a49ab4ca41014855362e8df5c98
 
 # ตรวจสอบว่ามีข้อมูลหรือไม่
 if not data.empty:
-    # สรุปข้อมูล
+    # ส่วนของ Dashboard
+    st.title("Dashboard Monitor Fee Charge")
+
+    # Total Subscribers
     st.subheader("Operator Total Subscribers", divider="gray")
-    # col1, col2, col3, col4, col5, col6 = st.columns(6)
-    # col1.metric("Total Subscribers", f"{data['total_sub'].sum():,}")
-    # for col, operator in zip([col2, col3, col4, col5, col6], data['operator_name']):
-    #     total_sub = data.loc[data['operator_name'] == operator, 'total_sub'].values[0]
-    #     col.metric(operator, f"{total_sub:,}")
-
-    # ใช้ CSS Styling เพื่อเพิ่มกรอบรอบ Metric Card
-    st.markdown(
-        """
-        <style>
-        .metric-box {
-            background-color: #f8f9f9;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin: 10px;
-        }
-        .total-subscribers-box {
-            background-color: #f8f9f9;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-size: 40px;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-        .metric-card {
-            background: #ffffff !important;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .metric-card .stMetric {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-        
-        }
-        .metric-card .stMetricValue {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1a73e8;
-          
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # แสดง Total Subscribers แบบ metric
     total_subscribers = data['total_sub'].sum()
     st.markdown(
         f"""
@@ -162,89 +119,38 @@ if not data.empty:
 
     # Fee Charge Summary
     st.subheader("Fee Charge", divider="gray")
+    total_fee_estimate = data['total_fee_estimate'].sum()
+    total_collected_fee = data['total_collected_fee'].sum()
+
+    fee_collected_percentage = (total_collected_fee / total_fee_estimate) * 100
+    fee_remaining = total_fee_estimate - total_collected_fee
+    percent_remaining = (fee_remaining / total_fee_estimate) * 100
+
     fee_col1, fee_col2, fee_col3 = st.columns(3)
-    # fee_col1.metric("Total Fee Estimate", f"{data['total_fee_estimate'].sum():,}")
-    # fee_col2.metric("Total Fee Collected", f"{data['total_collected_fee'].sum():,}")
+    fee_col1.markdown(f"""
+    <div class="total-subscribers-box">
+        <p>Total Fee Estimate (LAK)</p>
+        <h2>{total_fee_estimate:,}</h2>
+        <h6>(100%)</h6>
+    </div>
+    """, unsafe_allow_html=True)
+    fee_col2.markdown(f"""
+    <div class="total-subscribers-box">
+        <p>Total Fee Collected (LAK)</p>
+        <h2>{total_collected_fee:,}</h2>
+        <h6>({fee_collected_percentage:.2f}%)</h6>
+    </div>
+    """, unsafe_allow_html=True)
+    fee_col3.markdown(f"""
+    <div class="total-subscribers-box">
+        <p>Total Fee Remaining (LAK)</p>
+        <h2>{fee_remaining:,}</h2>
+        <h6>({percent_remaining:.2f}%)</h6>
+    </div>
+    """, unsafe_allow_html=True)
 
-    fee_collected_percentage = (
-        data['total_collected_fee'].sum() / data['total_fee_estimate'].sum()
-    ) * 100
-    fee_remaining = data['total_fee_estimate'].sum() - data['total_collected_fee'].sum()
-
-    fee_col1.markdown(
-        """
-        <div class="total-subscribers-box">
-            <p>Total Fee Estimate (LAK)</p>
-            <h2>{:,}</h2>
-            <h6> </h6>
-        </div>
-        """.format(data['total_fee_estimate'].sum()),
-        unsafe_allow_html=True,
-    )
-
-    fee_col2.markdown(
-        """
-        <div class="total-subscribers-box">
-            <p>Total Fee Collected (LAK)</p>
-            <h2>{:,}</h2>
-            <h6>({:.2f}%)</h6>
-            
-        </div>
-        """.format(data['total_collected_fee'].sum(), fee_collected_percentage),
-        unsafe_allow_html=True,
-    )
-
-    fee_col3.markdown(
-        """
-        <div class="total-subscribers-box">
-            <p>Total Fee Remaining (LAK)</p>
-            <h2>{:,}</h2>
-            <h6> </h6>
-            
-        </div>
-        """.format(fee_remaining ),
-        unsafe_allow_html=True,
-    )
-
-    # fee_col1.markdown(
-    # """
-    # <div class="total-subscribers-box">
-    #     <p>Total Fee Estimate (LAK)</p>
-    #     <h2>{:,}</h2>
-    # </div>
-    # """.format(data['total_fee_estimate'].sum()),
-    # unsafe_allow_html=True,
-    # )
-
-    # fee_col2.markdown(
-    # """
-    # <div class="total-subscribers-box">
-    #     <p>Total Fee Collected (LAK)</p>
-    #     <h2>{:,}</h2>
-    # </div>
-    # """.format(data['total_collected_fee'].sum()),
-    # unsafe_allow_html=True,
-    # )
-   
-
-
-    # st.subheader("Fee Charge")
-    # fee_col1, fee_col2 = st.columns(2)
-
-    # with fee_col1:
-    #     # st.markdown('<div class="metric-box">', unsafe_allow_html=True)
-    #     st.markdown("<h5>Total Fee Estimate</h3>", unsafe_allow_html=True)
-    #     st.metric("", f"{data['total_fee_estimate'].sum():,}")
-    #     st.markdown('</div>', unsafe_allow_html=True)
-
-    # with fee_col2:
-    #     # st.markdown('<div class="metric-box">', unsafe_allow_html=True)
-    #     st.markdown("<h5>Total Fee Collected</h3>", unsafe_allow_html=True)
-    #     st.metric("", f"{data['total_collected_fee'].sum():,}")
-    #     st.markdown('</div>', unsafe_allow_html=True)
-
-    # รายละเอียดค่าธรรมเนียม MBB และ FBB
-    st.subheader("Details by Service Type", divider="gray")
+     # รายละเอียดค่าธรรมเนียม MBB และ FBB
+    st.subheader("Details by Service Type (LTC)", divider="gray")
     service_col1, service_col2, service_col3, service_col4 = st.columns(4)
     service_col1.metric("Total Fee Estimate MBB (LAK)", f"{data['total_fee_charge_mbb'].sum():,}")
     service_col2.metric("Total Fee Collected MBB (LAK)", f"{data['total_collected_fee_mbb'].sum():,}")
@@ -254,8 +160,6 @@ if not data.empty:
     # Pie Charts
     st.subheader("Visualizations", divider="gray")
     pie_col1, pie_col2, pie_col3 = st.columns(3)
-
-    # Total fee collected vs estimated
     fig1 = px.pie(
         values=[
             data['total_collected_fee'].sum(),
@@ -266,7 +170,6 @@ if not data.empty:
     )
     pie_col1.plotly_chart(fig1)
 
-    # Fee MBB collected vs estimated
     fig2 = px.pie(
         values=[
             data['total_collected_fee_mbb'].sum(),
@@ -277,7 +180,6 @@ if not data.empty:
     )
     pie_col2.plotly_chart(fig2)
 
-    # Fee FBB collected vs estimated
     fig3 = px.pie(
         values=[
             data['total_collected_fee_fbb'].sum(),
@@ -289,3 +191,50 @@ if not data.empty:
     pie_col3.plotly_chart(fig3)
 else:
     st.warning("No data available to display.")
+
+options = {
+    "title": {"text": "Subscribers"},
+    "tooltip": {"trigger": "axis"},
+    "legend": {"data": ["LTC", "ETL", "UNITEL", "TPLUS", "BEST"]},
+    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
+    "toolbox": {"feature": {"saveAsImage": {}}},
+    "xAxis": {
+        "type": "category",
+        "boundaryGap": False,
+        "data": ["1", "2", "3", "4", "5", "6", "7", "8" , "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26"],
+    },
+    "yAxis": {"type": "value"},
+    "series": [
+        {
+            "name": "LTC",
+            "type": "line",
+           
+             "data": [99796, 95090, 130030, 38936, 133799, 14040, 106034, 125765, 60335, 123086, 82329, 112472, 148613, 133634, 117956, 76377, 48966, 56890, 15605, 8432, 98921, 77448, 61190, 61840, 30937, 143744],
+        },
+        {
+            "name": "ETL",
+            "type": "line",
+            
+            "data": [37888, 41535, 25513, 31117, 27273, 81302, 56879, 44847, 3108, 841, 49498, 8586, 70179, 74521, 74849, 3016, 35021, 35627, 50724, 29234, 67530, 21237, 78136, 27179, 4559, 45257],
+        },
+        {
+            "name": "UNITEL",
+            "type": "line",
+           
+            "data": [244766, 115029, 95817, 255190, 133356, 160984, 100495, 220173, 242412, 84693, 104486, 219746, 52761, 20907, 74036, 96754, 71091, 134701, 5193, 86389, 52694, 234828, 82094, 123973, 198152, 35134],
+        },
+        {
+            "name": "TPLUS",
+            "type": "line",
+            
+            "data": [58388, 56334, 47516, 2166, 19603, 7409, 13217, 50833, 33224, 41158, 67006, 4515, 36549, 18585, 32284, 33349, 38106, 10570, 54751, 70499, 67129, 56685, 24272, 39996, 39392, 61705],
+        },
+        {
+            "name": "BEST",
+            "type": "line",
+            
+            "data": [37, 98, 231, 245, 92, 135, 290, 103, 35, 214, 30, 273, 181, 80, 80, 262, 70, 247, 200, 321, 221, 40, 29, 23, 321, 100],
+        },
+    ],
+}
+st_echarts(options=options, height="400px")

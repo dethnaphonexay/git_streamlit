@@ -1,151 +1,164 @@
 import streamlit as st
-import psycopg2
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+import plotly.express as px
 
-# ตั้งค่าหน้าหลักของแอป
+# ตั้งค่าหน้าเว็บ
 st.set_page_config(page_title="Dashboard", layout="wide")
 
-# st.set_page_config(page_title="Dashboard", layout="wide", page_icon=":bar_chart:", initial_sidebar_state="expanded")
-# st.header("Dashboard", divider="gray")
-st.title("Dashboard")
-# หัวข้อหลัก
-st.header("Summary Total Subscribers" , divider="gray" )
-host = "172.28.27.50"
-dbname = "CDKPTL"
-user = "smscdr"
-password = "#Ltc1qaz2wsx@pg"
-port = "5432"
-# Fetch data immediately when connection details are filled
-if host and dbname and user and password and port:
+# CSS Styling
+st.markdown(
+    """
+    <style>
+    /* Custom Styling */
+    body {
+        background-color: #f9fafb;
+        font-family: 'Arial', sans-serif;
+        color: #333333;
+    }
+    .stTitle {
+        font-size: 28px;
+        color: #2c3e50;
+        font-weight: bold;
+    }
+    .metric-box {
+        background: #ffffff !important;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .total-subscribers-box {
+        background-color:rgb(239, 241, 241);
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-size: 40px;
+        font-weight: bold;
+        margin: 20px 0;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ฟังก์ชันสำหรับดึงข้อมูลจาก CSV
+@st.cache_data
+def load_data_from_path(file_path):
     try:
-        connection = psycopg2.connect(
-            dbname=dbname,
-            user=user,
-            password=password,
-            host=host,
-            port=port
-        )
-        cursor = connection.cursor()
-        query = """
-        SELECT subscriber_no, service_type, category, subscriber_status , operator_id
-        FROM gov.subscribers where operator_id = 1
-        """
-        cursor.execute(query)
-        data = cursor.fetchall()
-        df = pd.DataFrame(data, columns=[desc[0] for desc in cursor.description])
-        total_subscribers = len(df)
-        total_mbb = df[df["category"] == "MBB"].shape[0]
-        total_fbb = df[df["category"] == "FBB"].shape[0]
-        total_operator_ltc = df[df["operator_id"] == 1].shape[0]
-        subscriber_status_active = df[df["subscriber_status"] == "active"].shape[0]
-        total_operator_tplus = df[df["operator_id"] == 3].shape[0]
-        total_operator_etl = df[df["operator_id"] == 2].shape[0]
-        total_operator_unitel = df[df["operator_id"] == 4].shape[0]       
-        total_operator_best = df[df["operator_id"] == 5].shape[0]
-
-        # Query for Subscriber M-Phone metric
-        mphone_query = """
-        SELECT SUM(amount) 
-        FROM gov.fee_charge_logs 
-        WHERE operator_id = 1 AND subscriber_no LIKE '85620%'
-        """
-        cursor.execute(mphone_query)
-        subscriber_mphone = cursor.fetchone()[0] or 0
-
-        subscriber_summary = (
-            df.groupby(["service_type", "category", "subscriber_status", "operator_id"])
-            .size()
-            .reset_index(name="Count")
-        )
-        # # คอลัมน์สำหรับแสดงข้อมูลสรุป
-        
-
-        def custom_metric(title, value, size="30px", color="#4CAF50", border_color="#ddd", bg_color="#f9f9f9"):
-            st.markdown(
-                f"""
-                <div style="
-                text-align: center; 
-                padding: 15px;
-                border: 2px solid {border_color}; 
-                border-radius: 10px; 
-                background-color: {bg_color};
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            ">
-                <span style="font-size: 14px; font-weight: bold; color: gray;">{title}</span><br>
-                <span style="font-size: {size}; font-weight: bold; color: {color};">{value}</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        # ข้อมูลสรุปพร้อมจุดคั่นและขนาดใหญ่
-
-        col1, col2, col3, col4 = st.columns(4)
-
-        with col1:
-            custom_metric("Total Subscribers", f"{total_subscribers:,}", size="40px", color="black", border_color="#f0f3f4", bg_color="#f0f3f4")
-        with col2:
-            custom_metric("Subscriber Active", f"{subscriber_status_active:,}", size="40px", color="black", border_color="#f0f3f4", bg_color="#f0f3f4")
-        with col3:
-            custom_metric("Fee Total M-Phone", f"{subscriber_mphone:,.2f}", size="40px", color="black", border_color="#f0f3f4", bg_color="#f0f3f4")
-        with col4:
-            custom_metric("Subscriber Win-Phone", f"{total_operator_tplus:,}", size="40px", color="black", border_color="#f0f3f4", bg_color="#f0f3f4")
-        
-
-
-
-#########################################################################################
-        # st.header("Subscriber Status" , divider="gray" )
-        # # สร้าง Doughnut Charts สำหรับ operator_id แต่ละตัว
-        # fig, axes = plt.subplots(1, 5, figsize=(20, 6), sharey=True)  # 5 กราฟใน 1 แถว
-
-        # # ตั้งค่าชื่อ Operator
-        # operator_labels = {
-        #     1: "LTC",
-        #     2: "ETL",
-        #     3: "TPLUS",
-        #     4: "UNITEL",
-        #     5: "BEST"
-        # }
-
-        # # วนลูปสร้างกราฟ Doughnut Chart สำหรับแต่ละ operator_id
-        # for i, operator_id in enumerate(range(1, 6)):  # operator_id = 1 ถึง 5
-        #     operator_data = df[df["operator_id"] == operator_id]["subscriber_status"].value_counts()
-        #     wedges, texts, autotexts = axes[i].pie(
-        #         operator_data,
-        #         labels=operator_data.index,
-        #         autopct='%1.1f%%',
-        #         startangle=90,
-        #         colors=['#6495ED', '#CD5C5C'],  # สีของ Doughnut Chart
-        #         wedgeprops={'edgecolor': 'white'} # เพิ่มขอบสีขาว
-        #     )
-        #     # เพิ่มวงกลมตรงกลาง (ทำให้เป็นโดนัท)
-        #     center_circle = plt.Circle((0, 0), 0.35, fc='white')  # 40% ของกราฟถูกเจาะเป็นวงกลม
-        #     axes[i].add_artist(center_circle)
-
-        #     # ตั้งค่าชื่อกราฟ
-        #     axes[i].set_title(f"{operator_labels[operator_id]} Subscribers", fontsize=12)
-
-        # # ตั้งค่าพื้นหลังของกราฟแต่ละอัน
-        # axes[i].set_facecolor('#f0f3f4')  # เปลี่ยนพื้นหลังเป็นสีเทาอ่อน
-
-        # # ปรับแต่ง Layout
-        # plt.tight_layout()
-
-        # # แสดงกราฟใน Streamlit
-        # st.pyplot(fig)
-
-
-
-#########################################################################################
-
+        return pd.read_csv(file_path)
     except Exception as e:
-        st.error(f"An error occurred: {e}")
-    finally:
-        if cursor:
-            cursor.close()
-        if connection:
-            connection.close()
+        st.error(f"Error reading the file: {e}")
+        return pd.DataFrame()
 
+# ระบุ path ของไฟล์ CSV
+# file_path = "data.csv"  # แก้ไข path ตรงนี้เป็น path จริงของไฟล์ CSV บนระบบของคุณ
+file_path = r"C:\Users\Asus\Desktop\Project_stremlit\git_streamlit\data\operator_data.csv"
+
+# โหลดข้อมูล
+data = load_data_from_path(file_path)
+
+# ตรวจสอบว่ามีข้อมูลหรือไม่
+if not data.empty:
+    # ส่วนของ Dashboard
+    st.title("Dashboard Monitor Fee Charge")
+
+    # Total Subscribers
+    st.subheader("Operator Total Subscribers", divider="gray")
+    total_subscribers = data['total_sub'].sum()
+    st.markdown(
+        f"""
+        <div class="total-subscribers-box">
+            Total Subscribers: {total_subscribers:,}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    # สร้างกรอบรวมผู้ให้บริการทั้งหมด
+    for i in range(0, len(data), 5):  # สร้างทีละ 5 Operator
+        cols = st.columns(5)
+        for col, row in zip(cols, data.iloc[i:i + 5].itertuples()):
+            with col:
+                st.markdown(
+                    f"""
+                    <div class="metric-box">
+                        <h5>{row.operator_name}</h5>
+                        <p><b></b> <span style="font-size: 30px; font-weight: bold;">{row.total_sub:,}</span></p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+    # Fee Charge Summary
+    st.subheader("Fee Charge", divider="gray")
+    total_fee_estimate = data['total_fee_estimate'].sum()
+    total_collected_fee = data['total_collected_fee'].sum()
+
+    fee_collected_percentage = (total_collected_fee / total_fee_estimate) * 100
+    fee_remaining = total_fee_estimate - total_collected_fee
+    percent_remaining = (fee_remaining / total_fee_estimate) * 100
+
+    fee_col1, fee_col2, fee_col3 = st.columns(3)
+    fee_col1.markdown(f"""
+    <div class="total-subscribers-box">
+        <p>Total Fee Estimate (LAK)</p>
+        <h2>{total_fee_estimate:,}</h2>
+        <h6>(100%)</h6>
+    </div>
+    """, unsafe_allow_html=True)
+    fee_col2.markdown(f"""
+    <div class="total-subscribers-box">
+        <p>Total Fee Collected (LAK)</p>
+        <h2>{total_collected_fee:,}</h2>
+        <h6>({fee_collected_percentage:.2f}%)</h6>
+    </div>
+    """, unsafe_allow_html=True)
+    fee_col3.markdown(f"""
+    <div class="total-subscribers-box">
+        <p>Total Fee Remaining (LAK)</p>
+        <h2>{fee_remaining:,}</h2>
+        <h6>({percent_remaining:.2f}%)</h6>
+    </div>
+    """, unsafe_allow_html=True)
+
+     # รายละเอียดค่าธรรมเนียม MBB และ FBB
+    st.subheader("Details by Service Type (LTC)", divider="gray")
+    service_col1, service_col2, service_col3, service_col4 = st.columns(4)
+    service_col1.metric("Total Fee Estimate MBB (LAK)", f"{data['total_fee_charge_mbb'].sum():,}")
+    service_col2.metric("Total Fee Collected MBB (LAK)", f"{data['total_collected_fee_mbb'].sum():,}")
+    service_col3.metric("Total Fee Estimate FBB (LAK)", f"{data['total_fee_charge_fbb'].sum():,}")
+    service_col4.metric("Total Fee Collected FBB (LAK)", f"{data['total_collected_fee_fbb'].sum():,}")
+
+    # Pie Charts
+    st.subheader("Visualizations", divider="gray")
+    pie_col1, pie_col2, pie_col3 = st.columns(3)
+    fig1 = px.pie(
+        values=[
+            data['total_collected_fee'].sum(),
+            data['total_fee_estimate'].sum() - data['total_collected_fee'].sum()
+        ],
+        names=["Collected", "Remaining"],
+        title="Total Fee Collected"
+    )
+    pie_col1.plotly_chart(fig1)
+
+    fig2 = px.pie(
+        values=[
+            data['total_collected_fee_mbb'].sum(),
+            data['total_fee_charge_mbb'].sum() - data['total_collected_fee_mbb'].sum()
+        ],
+        names=["Collected MBB", "Remaining MBB"],
+        title="MBB Fee Collected"
+    )
+    pie_col2.plotly_chart(fig2)
+
+    fig3 = px.pie(
+        values=[
+            data['total_collected_fee_fbb'].sum(),
+            data['total_fee_charge_fbb'].sum() - data['total_collected_fee_fbb'].sum()
+        ],
+        names=["Collected FBB", "Remaining FBB"],
+        title="FBB Fee Collected"
+    )
+    pie_col3.plotly_chart(fig3)
+else:
+    st.warning("No data available to display.")
