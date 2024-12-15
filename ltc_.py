@@ -216,28 +216,98 @@ if not data.empty:
 else:
     st.warning("No data available to display.")
 
-# ECharts configuration
-st.subheader("Subscribers daily", divider="gray")
-# อ่านไฟล์ CSV
+# # ECharts configuration
+# st.subheader("Subscribers daily", divider="gray")
+# # อ่านไฟล์ CSV
+# # ฟังก์ชันโหลดข้อมูล
+# @st.cache_data
+# def load_data(file_path_):
+#     return pd.read_csv(file_path_)
+
+# # โหลดข้อมูลจากไฟล์
+# file_path_ = "total_sub_data_ltc.csv"  # ระบุไฟล์ CSV ของคุณ
+# data_ = load_data(file_path_)
+
+# # ตรวจสอบว่าข้อมูลถูกโหลดหรือไม่
+# if data_.empty:
+#     st.error("ไม่พบข้อมูลในไฟล์ CSV โปรดตรวจสอบไฟล์อีกครั้ง")
+# else:
+#     # สร้างกราฟ Plotly Line Chart
+#     fig = px.line(
+#         data_, 
+#         x="date", 
+#         y="Total_sub", 
+#         title="Total Subscriptions Over Days",
+#         markers=True
+#     )
+#     st.plotly_chart(fig)
+
+
+# st.subheader("Fee Collected daily", divider="gray")
+
+# # อ่านไฟล์ CSV
+# # ฟังก์ชันโหลดข้อมูล
+# @st.cache_data
+# def load_data(file_path_fee):
+#     return pd.read_csv(file_path_fee)
+
+# # โหลดข้อมูลจากไฟล์
+# file_path_fee = "total_daily_fee_ltc.csv"  # ระบุไฟล์ CSV ของคุณ
+# data_fee = load_data(file_path_fee)
+
+# # ตรวจสอบว่าข้อมูลถูกโหลดหรือไม่
+# if data_.empty:
+#     st.error("ไม่พบข้อมูลในไฟล์ CSV โปรดตรวจสอบไฟล์อีกครั้ง")
+# else:
+#     # สร้างกราฟ Plotly Line Chart
+#     fig = px.line(
+#         data_fee, 
+#         x="date", 
+#         y="Total_fee", 
+#         title="Total Fee Charge Over Days",
+#         markers=True
+#     )
+#     st.plotly_chart(fig)
+
+st.title("Daily Analysis Dashboard")
+
 # ฟังก์ชันโหลดข้อมูล
 @st.cache_data
 def load_data(file_path_):
     return pd.read_csv(file_path_)
 
-# โหลดข้อมูลจากไฟล์
-file_path_ = "total_sub_data_ltc.csv"  # ระบุไฟล์ CSV ของคุณ
-data_ = load_data(file_path_)
+# โหลดข้อมูลไฟล์ CSV
+file_path_sub = "total_sub_data_ltc.csv"  # ระบุไฟล์ CSV ของคุณ
+data_sub = load_data(file_path_sub)
+
+file_path_fee = "total_daily_fee_ltc.csv"  # ระบุไฟล์ CSV ของคุณ
+data_fee = load_data(file_path_fee)
 
 # ตรวจสอบว่าข้อมูลถูกโหลดหรือไม่
-if data_.empty:
+if data_sub.empty or data_fee.empty:
     st.error("ไม่พบข้อมูลในไฟล์ CSV โปรดตรวจสอบไฟล์อีกครั้ง")
 else:
-    # สร้างกราฟ Plotly Line Chart
-    fig = px.line(
-        data_, 
-        x="date", 
-        y="Total_sub", 
-        title="Total Subscriptions Over Days",
-        markers=True
-    )
-    st.plotly_chart(fig)
+    # ใช้ st.columns เพื่อแสดงสองกราฟคู่กัน
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Subscribers Daily", divider="gray")
+        fig_sub = px.line(
+            data_sub, 
+            x="date", 
+            y="Total_sub", 
+            title="Total Subscriptions Over Days",
+            markers=True
+        )
+        st.plotly_chart(fig_sub)
+
+    with col2:
+        st.subheader("Fee Collected Daily (LAK)", divider="gray")
+        fig_fee = px.line(
+            data_fee, 
+            x="date", 
+            y="Total_fee", 
+            title="Total Fee Charge Over Days",
+            markers=True
+        )
+        st.plotly_chart(fig_fee)
