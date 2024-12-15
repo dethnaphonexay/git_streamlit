@@ -206,28 +206,28 @@ if not data.empty:
 else:
     st.warning("No data available to display.")
 
+# ECharts configuration
 st.subheader("Subscribers daily", divider="gray")
-options = {
-    "title": {"text": "Total"},
-    "tooltip": {"trigger": "axis"},
-    "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}},
-    "legend": {"data": ["BEST"]},
-    "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": True},
-    "toolbox": {"feature": {"saveAsImage": {}}},
-    "xAxis": {
-        "type": "category",
-        "boundaryGap": False,
-        "data": ["1", "2", "3", "4", "5", "6", "7", "8" , "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26"],
-    },
-    "yAxis": {"type": "value"},
-    "series": [
-        {
-            "name": "LTC",
-            "type": "line",
-            "areaStyle": {},
-            "emphasis": {"focus": "series"},         
-            "data": [37, 98, 231, 245, 92, 135, 290, 103, 35, 214, 30, 273, 181, 80, 80, 262, 70, 247, 200, 321, 221, 40, 29, 23, 321, 100],
-        },
-    ],
-}
-st_echarts(options=options, height="400px")
+# อ่านไฟล์ CSV
+# ฟังก์ชันโหลดข้อมูล
+@st.cache_data
+def load_data(file_path_):
+    return pd.read_csv(file_path_)
+
+# โหลดข้อมูลจากไฟล์
+file_path_ = "total_sub_data_best.csv"  # ระบุไฟล์ CSV ของคุณ
+data_ = load_data(file_path_)
+
+# ตรวจสอบว่าข้อมูลถูกโหลดหรือไม่
+if data_.empty:
+    st.error("ไม่พบข้อมูลในไฟล์ CSV โปรดตรวจสอบไฟล์อีกครั้ง")
+else:
+    # สร้างกราฟ Plotly Line Chart
+    fig = px.line(
+        data_, 
+        x="date", 
+        y="Total_sub", 
+        title="Total Subscriptions Over Days",
+        markers=True
+    )
+    st.plotly_chart(fig)

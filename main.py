@@ -10,6 +10,7 @@ st.set_page_config(page_title="Dashboard", layout="wide")
 #     st.error(f"ไม่สามารถเพิ่มโลโก้ได้: {e}")
 
 pages = {
+    "FEES CHANGE":[],
     "MENU": [
         st.Page("home.py", title="Home"),
     ],
@@ -20,6 +21,7 @@ pages = {
         st.Page("tplus.py", title="TPLUS"),
         st.Page("best.py", title="BEST"),
     ],
+   
 }
 
 pg = st.navigation(pages)
