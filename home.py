@@ -56,6 +56,7 @@ file_path = r"operator_data.csv"
 
 # โหลดข้อมูล
 data = load_data_from_path(file_path)
+data["image_path"] = ["p_ltc.jpg", "p_tplus.jpg", "p_unitel.jpg", "p_etl.jpg", "p_best.jpg"]
 
 # ตรวจสอบว่ามีข้อมูลหรือไม่
 if not data.empty:
@@ -78,10 +79,13 @@ if not data.empty:
         cols = st.columns(5)
         for col, row in zip(cols, data.iloc[i:i + 5].itertuples()):
             with col:
+
+                st.image(row.image_path, width=100 ,)  # Add image
+                
                 st.markdown(
                     f"""
                     <div class="metric-box">
-                        <h5>{row.operator_name}</h5>
+                        <h6>{row.operator_name}</h6>
                         <p><b></b> <span style="font-size: 30px; font-weight: bold;">{row.total_sub:,}</span></p>
                     </div>
                     """,
